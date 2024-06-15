@@ -86,7 +86,7 @@ export class SignupComponent {
     const body = {
       username: this.user.get('email')?.value ?? '',
       password: this.user.get('password')?.value ?? '',
-      companyName: this.name.get('company')?.value ?? '',
+      company: this.name.get('company')?.value ?? '',
       address: {
         street: this.address.get('street')?.value ?? '',
         city: this.address.get('city')?.value ?? '',

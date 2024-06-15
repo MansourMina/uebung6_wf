@@ -2,27 +2,22 @@ const asyncHandler = require('express-async-handler');
 
 const db = require('../model/db');
 
-// const deleteCar = asyncHandler(async (req, res) => {
-//   const { data, code } = await carModel.deleteCar(req.params.id);
-//   res.status(code).json(data);
-// });
-
 const valid_data = (data) => {
   return !(!data || data == undefined || data == null || data == false);
 };
 
-const signup = asyncHandler((req, res) => {
-  const { username, password } = req.body;
-  const data = db.signup(username, password);
+const signup = asyncHandler(async (req, res) => {
+  const data = await db.signup(req.body);
+  console.log(data);
   const valid = valid_data(data);
   if (valid) {
     res.status(201).json(data);
-  } else res.status(400).json('Registration failed! User already exists.');
+  } else res.status(400).json('Registration failed!');
 });
 
-const login = asyncHandler((req, res) => {
+const login = asyncHandler(async (req, res) => {
   const { username, password } = req.body;
-  const data = db.login(username, password);
+  const data = await db.login(username, password);
   const valid = valid_data(data);
   if (valid) {
     res.status(201).json(data);
@@ -36,22 +31,23 @@ const isAuthenticated = asyncHandler((req, res) => {
   res.status(valid ? 201 : 401).json(data);
 });
 
-const addHighscore = asyncHandler((req, res) => {
+const addHighscore = asyncHandler(async (req, res) => {
   const { username, score } = req.body;
   try {
-    db.addHighscore(username, score);
+    await db.addHighscore(username, score);
     res.status(201).json('Highscore saved');
   } catch (error) {
     res.status(400).json('Could not add highscore');
   }
 });
 
-const getHighscores = asyncHandler((req, res) => {
-  const data = db.getHighscores();
+const getHighscores = asyncHandler(async (req, res) => {
+  const data = await db.getHighscores();
   if (data.length > 0) {
     res.status(201).json(data);
   } else res.status(204).json('There are no highscores yet!');
 });
+
 
 const endSession = asyncHandler((req, res) => {
   try {

@@ -5,46 +5,47 @@ const { Highscore } = require('../db/schemas/highscore');
 const { User } = require('../db/schemas/user');
 
 var db = {
-  users: [
-    { username: 'test@test.at', password: passwordHash.generate('12345678') },
-    {
-      username: 'linus@kernel.org',
-      password: passwordHash.generate('abcdefg'),
-    },
-    { username: 'steve@apple.com', password: passwordHash.generate('123456') },
-    {
-      username: 'bill@microsoft.com',
-      password: passwordHash.generate('987654'),
-    },
-  ],
-
   tokens: [],
 
-  highscores: [
-    { username: 'test@test.at', score: 1600 },
-    { username: 'linus@kernel.org', score: 1900 },
-    { username: 'bill@microsoft.com', score: 400 },
-  ],
+  signup: async function (user_cred) {
+    console.log(user_cred);
+    let user = await User.findOne({ username: user_cred.username });
+    console.log(user);
 
-  signup: function (username, password) {
-    let user = this.users.find((u) => u.username == username);
-    if (user !== undefined) {
+    if (user) {
       return false;
     }
-    this.users.push({
-      username: username,
-      password: passwordHash.generate(password),
-    });
+    let newUser = this.newUser(user_cred);
+    if (!newUser) return false;
+
     let credentials = {
       token: randomToken(64),
-      username: username,
+      username: newUser.username,
     };
     this.tokens.push(credentials);
     return credentials;
   },
 
-  login: function (username, password) {
-    let user = this.users.find((u) => u.username === username);
+  newUser: async function (user_cred) {
+    const { company, username, password, address } = user_cred;
+    const user = new User({
+      company,
+      username,
+      password: passwordHash.generate(password),
+      address,
+    });
+    user
+      .save()
+      .then((user) => {
+        return user;
+      })
+      .catch((err) => {
+        return false;
+      });
+  },
+
+  login: async function (username, password) {
+    let user = await User.findOne({ username: username });
     if (user != undefined && passwordHash.verify(password, user.password)) {
       let credentials = {
         token: randomToken(64),
@@ -70,14 +71,19 @@ var db = {
     return this.tokens.find((auth) => auth.token == authToken);
   },
 
-  getHighscores: function () {
-    return this.highscores.sort(function (a, b) {
+  getHighscores: async function () {
+    const highscores = await Highscore.find({});
+    return highscores.sort(function (a, b) {
       return b.score - a.score;
     });
   },
 
   addHighscore: function (username, score) {
-    this.highscores.push({ username: username, score: score });
+    const highscore = new Highscore({ username, score });
+    highscore
+      .save()
+      .then((user) => console.log(user))
+      .catch((err) => console.error(err));
   },
 };
 

@@ -1,11 +1,11 @@
 <div class="container">
-  <form [formGroup]="highscore">
-    <mat-tab-group>
-      <mat-tab>
-        <ng-template mat-tab-label>
-          <mat-icon>add_circle</mat-icon>
-          <span style="margin-left: 5px">Add</span>
-        </ng-template>
+  <mat-tab-group>
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>add_circle</mat-icon>
+        <span style="margin-left: 5px">Add</span>
+      </ng-template>
+      <form [formGroup]="highscore" (ngSubmit)="addHighscore()">
         <div class="example-container content">
           <mat-form-field>
             <mat-label>Username</mat-label>
@@ -28,45 +28,53 @@
               mat-raised-button
               class="mat-primary"
               [disabled]="!highscore.valid"
-              (click)="addHighscore()"
               type="submit"
             >
               Add Highscore
             </button>
+            <p
+              [ngStyle]="{
+                color: highscoreMessage.status ? 'green' : 'red',
+                'margin-top': '10px'
+              }"
+            >
+              {{ highscoreMessage.message }}
+            </p>
           </div>
         </div>
-      </mat-tab>
-      <mat-tab label="Highscores">
-        <ng-template mat-tab-label>
-          <mat-icon>auto_awesome_motion</mat-icon>
-          <span style="margin-left: 5px">Highscores</span>
-        </ng-template>
-        <div class="content">
-          <table matSort (matSortChange)="sortData($event)">
-            <tr>
-              <th mat-sort-header="score">Highscore</th>
-              <th mat-sort-header="username">Username</th>
-            </tr>
+      </form>
+    </mat-tab>
 
-            <tr *ngFor="let score of sortedData; let i = index">
-              <td>{{ score.score }}</td>
-              <td>{{ score.username }}</td>
-            </tr>
-          </table>
-        </div>
-      </mat-tab>
+    <mat-tab label="Highscores">
+      <ng-template mat-tab-label>
+        <mat-icon>auto_awesome_motion</mat-icon>
+        <span style="margin-left: 5px">Highscores</span>
+      </ng-template>
+      <div class="content">
+        <table matSort (matSortChange)="sortData($event)">
+          <tr>
+            <th mat-sort-header="score">Highscore</th>
+            <th mat-sort-header="username">Username</th>
+          </tr>
 
-      <mat-tab>
-        <ng-template mat-tab-label>
-          <mat-icon>settings</mat-icon>
-          <span style="margin-left: 5px">Settings</span>
-        </ng-template>
-        <div class="content">
-          <button mat-raised-button class="mat-warn" (click)="logout()">
-            Logout
-          </button>
-        </div>
-      </mat-tab>
-    </mat-tab-group>
-  </form>
+          <tr *ngFor="let score of sortedData; let i = index">
+            <td>{{ score.score }}</td>
+            <td>{{ score.username }}</td>
+          </tr>
+        </table>
+      </div>
+    </mat-tab>
+
+    <mat-tab>
+      <ng-template mat-tab-label>
+        <mat-icon>settings</mat-icon>
+        <span style="margin-left: 5px">Settings</span>
+      </ng-template>
+      <div class="content">
+        <button mat-raised-button class="mat-warn" (click)="logout()">
+          Logout
+        </button>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
 </div>

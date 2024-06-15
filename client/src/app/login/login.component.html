@@ -1,11 +1,11 @@
 <div class="container">
-  <form class="example-form">
+  <form class="example-form" (ngSubmit)="login()" [formGroup]="loginForm">
     <mat-form-field class="full-width">
       <mat-label>Email</mat-label>
       <input
         type="email"
         matInput
-        [formControl]="email"
+        formControlName="email"
         placeholder="Ex. pat@example.com"
       />
 
@@ -21,7 +21,7 @@
       <input
         [type]="hide ? 'password' : 'text'"
         matInput
-        [formControl]="password"
+        formControlName="password"
       />
       <button
         mat-icon-button
@@ -41,18 +41,13 @@
 
     <div class="signUpFooter">
       <button
-        [disabled]="!validForm()"
+        [disabled]="this.loginForm.invalid"
         mat-raised-button
         class="login-button mat-primary"
-        (click)="login()"
       >
         Login
       </button>
-      <a
-        routerLink="/signup"
-        type="button"
-        class="signupButton"
-      >
+      <a routerLink="/signup" type="button" class="signupButton">
         Dont't have an Account yet?
       </a>
     </div>

@@ -2,9 +2,17 @@ POST http://localhost:3000/users
 Content-Type: application/json
 
 {
-"username": "vamos@gmail.com",
-"password": "1232434323"
+"company": "John",
+"username": "john@example.com",
+"password": "Test",
+"address": {
+"street": "123 Main St",
+"city": "Anytown",
+"state": "CA",
+"zip": "12345"
 }
+}
+
 ###
 POST http://localhost:3000/sessions
 Content-Type: application/json
@@ -23,6 +31,5 @@ Content-Type: application/json
 }
 ###
 GET http://localhost:3000/highscore
-
 ###
 DELETE http://localhost:3000/sessions/312312321

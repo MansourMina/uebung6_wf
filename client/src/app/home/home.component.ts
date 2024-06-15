@@ -54,11 +54,14 @@ export class HomeComponent implements OnInit {
   private authenticate_url = 'http://localhost:3000/authenticate';
   private highscore_url = 'http://localhost:3000/highscore';
   private signout_url = 'http://localhost:3000/sessions';
-  errorHighScoreMessage = '';
   highscores: HighScore[] = [];
   sortedData: HighScore[] | undefined;
   user: User;
   highscore: FormGroup;
+  highscoreMessage = {
+    status: false,
+    message: '',
+  };
 
   constructor(
     private http: HttpClient,
@@ -96,12 +99,23 @@ export class HomeComponent implements OnInit {
   async addHighscore() {
     if (!this.highscore.valid) return;
     const body = {
-      username: this.highscore.get('username')?.value ?? '',
-      score: this.highscore.get('score')?.value ?? '',
+      username: this.highscore.get('username')?.value,
+      score: this.highscore.get('score')?.value,
     };
     try {
       await this.http.post(this.highscore_url, body).toPromise();
-    } catch (error) {}
+      this.highscoreMessage = {
+        status: true,
+        message: 'Highscore successfully added.',
+      };
+      this.highscores.push(<HighScore>body);
+      this.sortData({ active: 'score', direction: 'desc' });
+    } catch (error) {
+      this.highscoreMessage = {
+        status: false,
+        message: 'Error adding highscore.',
+      };
+    }
   }
 
   async valid_user(): Promise<boolean> {

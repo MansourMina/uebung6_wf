@@ -5,6 +5,7 @@ import {
   Validators,
   FormsModule,
   ReactiveFormsModule,
+  FormGroup,
 } from '@angular/forms';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -39,17 +40,22 @@ import { HttpClientModule } from '@angular/common/http';
   styleUrl: './login.component.scss',
 })
 export class LoginComponent {
-  navigateSignUp() {}
   errorMessage = '';
   hide = true;
-  email = new FormControl('', [Validators.required, Validators.email]);
-  password = new FormControl('', [Validators.required]);
+  loginForm = new FormGroup({
+    email: new FormControl('', [Validators.required, Validators.email]),
+    password: new FormControl('', [Validators.required]),
+  });
+
   private login_url = 'http://localhost:3000/sessions';
   private authenticate_url = 'http://localhost:3000/authenticate';
   constructor(private http: HttpClient, private router: Router) {}
+  get email() {
+    return this.loginForm.get('email')!;
+  }
 
-  validForm() {
-    return this.email.valid && this.password.valid;
+  get password() {
+    return this.loginForm.get('password')!;
   }
   displayStyles = (input: FormControl) => {
     const styles: Object = {
@@ -60,10 +66,10 @@ export class LoginComponent {
   };
 
   login() {
-    if (!this.validForm()) return;
+    if (this.loginForm.invalid) return;
     const body = {
-      username: this.email.value ?? '',
-      password: this.password.value ?? '',
+      username: this.email.value,
+      password: this.password.value,
     };
 
     this.http.post(this.login_url, body).subscribe(
