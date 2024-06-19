@@ -5,33 +5,35 @@
         <mat-icon>add_circle</mat-icon>
         <span style="margin-left: 5px">Add</span>
       </ng-template>
-      <form [formGroup]="highscore" (ngSubmit)="addHighscore()">
-        <div class="example-container content">
-          <mat-form-field>
-            <mat-label>Username</mat-label>
-            <input matInput formControlName="username" readonly />
-          </mat-form-field>
-          <mat-form-field floatLabel="always">
-            <mat-label>Highscore</mat-label>
-            <input
-              matInput
-              type="number"
-              class="example-right-align"
-              placeholder="0"
-              formControlName="score"
-              required
-            />
-            <span matTextPrefix>+&nbsp;</span>
-          </mat-form-field>
-          <div>
-            <button
-              mat-raised-button
-              class="mat-primary"
-              [disabled]="!highscore.valid"
-              type="submit"
-            >
-              Add Highscore
-            </button>
+      <div class="tab-content">
+        <form [formGroup]="highscore" (ngSubmit)="addHighscore()">
+          <div class="example-container content">
+            <mat-form-field>
+              <mat-label>Username</mat-label>
+              <input matInput formControlName="username" readonly />
+            </mat-form-field>
+            <mat-form-field floatLabel="always">
+              <mat-label>Highscore</mat-label>
+              <input
+                matInput
+                type="number"
+                class="example-right-align"
+                placeholder="0"
+                formControlName="score"
+                required
+              />
+              <span matTextPrefix>+&nbsp;</span>
+            </mat-form-field>
+            <div style="text-align: center">
+              <button
+                mat-raised-button
+                class="mat-primary"
+                [disabled]="!highscore.valid"
+                type="submit"
+              >
+                Add Highscore
+              </button>
+            </div>
             <p
               [ngStyle]="{
                 color: highscoreMessage.status ? 'green' : 'red',
@@ -41,8 +43,8 @@
               {{ highscoreMessage.message }}
             </p>
           </div>
-        </div>
-      </form>
+        </form>
+      </div>
     </mat-tab>
 
     <mat-tab label="Highscores">
@@ -50,7 +52,7 @@
         <mat-icon>auto_awesome_motion</mat-icon>
         <span style="margin-left: 5px">Highscores</span>
       </ng-template>
-      <div class="content">
+      <div class="tab-content">
         <table matSort (matSortChange)="sortData($event)">
           <tr>
             <th mat-sort-header="score">Highscore</th>
@@ -70,7 +72,7 @@
         <mat-icon>settings</mat-icon>
         <span style="margin-left: 5px">Settings</span>
       </ng-template>
-      <div class="content">
+      <div class="tab-content">
         <button mat-raised-button class="mat-warn" (click)="logout()">
           Logout
         </button>

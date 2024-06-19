@@ -8,7 +8,6 @@ const valid_data = (data) => {
 
 const signup = asyncHandler(async (req, res) => {
   const data = await db.signup(req.body);
-  console.log(data);
   const valid = valid_data(data);
   if (valid) {
     res.status(201).json(data);

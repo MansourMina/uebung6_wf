@@ -8,10 +8,7 @@ var db = {
   tokens: [],
 
   signup: async function (user_cred) {
-    console.log(user_cred);
     let user = await User.findOne({ username: user_cred.username });
-    console.log(user);
-
     if (user) {
       return false;
     }
@@ -80,10 +77,7 @@ var db = {
 
   addHighscore: function (username, score) {
     const highscore = new Highscore({ username, score });
-    highscore
-      .save()
-      .then((user) => console.log(user))
-      .catch((err) => console.error(err));
+    highscore.save();
   },
 };
 
